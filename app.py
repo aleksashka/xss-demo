@@ -93,11 +93,18 @@ def index():
     global template_start, template_end, saved_user_text
     html_content = template_start
 
+    set_cookies = False
+
     if request.method == "POST":
         user_text = request.form.get("message", "").strip()
         saved_user_text = user_text
+        if not user_text:
+            set_cookies = True
     else:
+        # GET
         user_text = saved_user_text
+        if request.cookies.get("auth_id") is None:
+            set_cookies = True
 
     if user_text:
         html_content += user_text
@@ -105,7 +112,7 @@ def index():
     html_content += template_end
 
     response = make_response(html_content)
-    if request.method == "GET":
+    if set_cookies:
         auth_id = hashlib.sha256(str(time.time()).encode()).hexdigest()
         response.set_cookie("auth_id", auth_id)
         # response.set_cookie("auth_id", auth_id, httponly=True)
