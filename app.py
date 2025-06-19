@@ -83,16 +83,19 @@ template_end = """
 </html>
 """
 
+saved_user_text = ""
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    global template_start, template_end
+    global template_start, template_end, saved_user_text
     html_content = template_start
 
     if request.method == "POST":
         user_text = request.form.get("message", "").strip()
+        saved_user_text = user_text
     else:
-        user_text = ""
+        user_text = saved_user_text
 
     if user_text:
         html_content += user_text
