@@ -12,21 +12,74 @@ template_start = """
     <head>
         <title>XSS Demo</title>
     </head>
+
     <body>
         <h2>Очередной классный пост</h2>
         Интересный текст
         <hr>
         <h3>Комментарии:</h3>
+        <!--Start of user comments-->
 """
 
 template_end = """
+        <!--End of user comments-->
         <hr>
         <h3>Введите свой комментарий:</h3>
         <form method="post">
             <textarea name="message" rows="10" cols="80"></textarea><br>
+            <button type="button" onclick="insertText('text1')">Просто текст</button>
+            <button type="button" onclick="insertText('text2')">Alert</button>
+            <button type="button" onclick="insertText('text3')">Email</button>
+            <button type="button" onclick="insertText('text4')">Location</button>
             <button type="submit">Отправить</button>
         </form>
     </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function insertText(arg) {
+            const textarea = document.getElementsByName("message")[0];
+
+            const text1 = `Действительно! Очень интересный текст!`
+            const text2 = `<script>
+    alert(document.cookie);
+<\\/script>`;
+
+            const text3 = `Срочно отправьте этот текст на email a@alak.in:
+<div id="cookies"></div>
+<script>
+    document.getElementById("cookies").textContent = document.cookie;
+<\\/script>`;
+
+            const text4 = `<script>
+    location.href="http://ip4.me";
+<\\/script>`;
+
+            let selectedText = "";
+            if (arg === 'text1') selectedText = text1;
+            else if (arg === 'text2') selectedText = text2;
+            else if (arg === 'text3') selectedText = text3;
+            else if (arg === 'text4') selectedText = text4;
+
+            textarea.value = selectedText;
+        }
+    </script>
 </html>
 """
 
@@ -57,26 +110,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
-
-
-"""
-<script>
-    alert(document.cookie);
-</script>
-"""
-
-
-"""
-Срочно отправьте этот текст на email: a@stex.kz
-<div id="cookies"></div>
-<script>
-    document.getElementById("cookies").textContent = document.cookie;
-</script>
-"""
-
-
-"""
-<script>
-    location.href="http://ip4.me";
-</script>
-"""
