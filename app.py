@@ -43,12 +43,14 @@ def index():
 
     if user_text:
         html_content += user_text
+        # html_content += html.escape(user_text)
     html_content += template_end
 
     response = make_response(html_content)
     if request.method == "GET":
         auth_id = hashlib.sha256(str(time.time()).encode()).hexdigest()
         response.set_cookie("auth_id", auth_id)
+        # response.set_cookie("auth_id", auth_id, httponly=True)
         response.set_cookie("admin", "True")
     return response
 
