@@ -27,12 +27,12 @@ template_end = """
         <h3>Введите свой комментарий:</h3>
         <form method="post">
             <textarea name="message" rows="10" cols="80"></textarea><br>
+            <button type="submit">Отправить</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" onclick="insertText('just_text')">Просто текст</button>
             <button type="button" onclick="insertText('alert1')">Alert</button>
             <button type="button" onclick="insertText('comment')">Comment</button>
             <button type="button" onclick="insertText('alert2')">Better alert</button>
             <button type="button" onclick="insertText('location')">Location</button>
-            <button type="submit">Отправить</button>
         </form>
     </body>
 
