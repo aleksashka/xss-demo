@@ -27,7 +27,7 @@ template_end = """
         <h3>Введите свой комментарий:</h3>
         <form method="post">
             <textarea name="message" rows="10" cols="80"></textarea><br>
-            <button type="submit">Отправить</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit">send_reload</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" onclick="insertText('just_text')">Просто текст</button>
             <button type="button" onclick="insertText('alert1')">Alert</button>
             <button type="button" onclick="insertText('comment')">Comment</button>
@@ -94,22 +94,29 @@ def index():
     html_content = template_start
 
     set_cookies = False
-
-    if request.method == "POST":
-        user_text = request.form.get("message", "").strip()
-        saved_user_text = user_text
-        if not user_text:
-            set_cookies = True
+    if request.remote_addr == "127.0.0.1":
+        # Admin, showing demo, can POST a message
+        send_reload = 'Отправить'
+        if request.method == "POST":
+            user_text = request.form.get("message", "").strip()
+            saved_user_text = user_text
+            if not user_text:
+                set_cookies = True
     else:
-        # GET
+        # Viewers can only Refresh
+        send_reload = 'Обновить'
+        user_text = None
+    if request.method == "GET":
         user_text = saved_user_text
         if request.cookies.get("auth_id") is None:
             set_cookies = True
 
+    if user_text is None:
+        user_text = saved_user_text
     if user_text:
         html_content += user_text
         # html_content += html.escape(user_text)
-    html_content += template_end
+    html_content += template_end.replace('send_reload', send_reload)
 
     response = make_response(html_content)
     if set_cookies:
