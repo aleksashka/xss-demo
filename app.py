@@ -94,8 +94,8 @@ def index():
     html_content = template_start
 
     set_cookies = False
-    if request.remote_addr == "127.0.0.1":
-        # Admin, showing demo, can POST a message
+    if request.cookies.get("admin", "0") == "1":
+        # Only admin can POST messages
         send_reload = "Отправить"
         if request.method == "POST":
             user_text = request.form.get("message", "").strip()
@@ -123,7 +123,11 @@ def index():
         auth_id = hashlib.sha256(str(time.time()).encode()).hexdigest()
         response.set_cookie("auth_id", auth_id)
         # response.set_cookie("auth_id", auth_id, httponly=True)
-        response.set_cookie("admin", "True")
+        if request.remote_addr == "127.0.0.1":
+            # Only localhost is the admin
+            response.set_cookie("admin", "1")
+        else:
+            response.set_cookie("admin", "0")
     return response
 
 
