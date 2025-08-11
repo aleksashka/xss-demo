@@ -96,7 +96,7 @@ def index():
     set_cookies = False
     if request.remote_addr == "127.0.0.1":
         # Admin, showing demo, can POST a message
-        send_reload = 'Отправить'
+        send_reload = "Отправить"
         if request.method == "POST":
             user_text = request.form.get("message", "").strip()
             saved_user_text = user_text
@@ -104,7 +104,7 @@ def index():
                 set_cookies = True
     else:
         # Viewers can only Refresh
-        send_reload = 'Обновить'
+        send_reload = "Обновить"
         user_text = None
     if request.method == "GET":
         user_text = saved_user_text
@@ -116,7 +116,7 @@ def index():
     if user_text:
         html_content += user_text
         # html_content += html.escape(user_text)
-    html_content += template_end.replace('send_reload', send_reload)
+    html_content += template_end.replace("send_reload", send_reload)
 
     response = make_response(html_content)
     if set_cookies:
